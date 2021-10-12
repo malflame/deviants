@@ -114,7 +114,6 @@
       ;--if add center text
       (setq x (- (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
       (ptext x y 0 1 "####" 7 textsize "x_blocknumber")
-      ;(print dist)
       )
     (progn
       (setq x (min (nth 0 line1point1) (nth 0 line1point2)))
