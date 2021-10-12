@@ -86,18 +86,6 @@
     )
   )
 
-(defun changeObj(objin / objout)
-  (if obj ; if exists then continue
-    (progn
-      (setq obj (subst (cons 8 "blocks") (assoc 8 obj) obj)); replace object into new layer
-      (if (assoc 62 obj) ; find parameter named 62 which contain color attribute
-	(setq obj (subst (cons 62 5) (assoc 62 obj) obj)); change color
-	(setq obj (append obj (list (cons 62 5)))); add color
-	)
-      )
-    )
-  )
-
 (defun printext(line1point1 line1point2 line2point1 line2point2 textsize)
   (if (not (setq cen (inters line1point1 line2point2 line1point2 line2point1)))
     (setq cen (inters line1point1 line2point1 line1point2 line2point2))
@@ -144,11 +132,9 @@
     )
   )
 
-(defun pp4(/)
+(defun C:Deviants(/)
   (setq txtStyle (getvar "textstyle"))
   (command "._STYLE" "ArialNew" "Arial" 0 1 0 "_N" "_N" "_N")
-  (if (not (setq layer (tblsearch "LAYER" "blocks")))
-    (command "._layer" "_n" "blocks" "_c" 5 "blocks" "")); add new layer if not exists
   (if (not (setq layer (tblsearch "LAYER" "deviants")))
     (command "._layer" "_n" "deviants" "_c" 6 "deviants" "")); add new layer if not exists
   ;(setq textsize (getreal "¬ведите размер текста:")) ; TextSize
@@ -209,4 +195,4 @@
   (princ)
   )
 
-  (pp4)
+  ;(pp4)
