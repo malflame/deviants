@@ -25,7 +25,6 @@
   (setq ob (subst (cons 40 ts) (assoc 40 ob) ob))
   (entmod ob)
   (entupd le)
- ; (print (assoc 10 ob))
 )
 
 (defun rnd (/)
@@ -91,7 +90,7 @@
   (if (not (setq cen (inters line1point1 line2point2 line1point2 line2point1)))
     (setq cen (inters line1point1 line2point1 line1point2 line2point2))
     )
-  ;(print cen)
+
   (setq dist (min
 	       (distance line1point1 line2point1)
 	       (distance line1point1 line2point2)
@@ -110,8 +109,8 @@
       (setq x (min (nth 0 line2point1) (nth 0 line2point2)))
       (setq x (- x (/ dist 6)))
       (ptext x y 0 2 (rndRange) 6 textsize)
-
-      (setq x (- (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
+      ;--if add center text
+      ;(setq x (- (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
       ;(ptext x y 0 1 "¹" 7 textsize)
       )
     (progn
@@ -123,8 +122,8 @@
       (setq y (max (nth 1 line1point1) (nth 1 line1point2)))
       (setq y (- y (/ dist 6)))
       (ptext x y 90 2 (rndRange) 6 textsize)
-
-      (setq x (+ (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
+      ;--if add center text
+      ;(setq x (+ (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
       ;(ptext x y 90 1 "¹" 7 textsize)
       )
     )
@@ -146,36 +145,17 @@
     (progn
       (if (setq obj (getOb point -100000 0)); find object in left side
 	(progn
-	  ;(setq o1p1 point)
-	  ;(setq o1p2 (list (- (nth 0 point) 100000) (nth 1 point) 0.0))
 	  (setq line1point1 (cdr (assoc 10 obj)))
 	  (setq line1point2 (cdr (assoc 11 obj)))
-	  ;(print (list o1p1 o1p2))
-	  ;(print (list line1point1 line1point2))
-	  ;(print (inters o1p1 o1p2 o2p1 o2p2))
-	  ;(print (length obj))
-	  ;(entmod (changeObj obj))
 	  (if (= (cdr (assoc 0 obj)) "LINE") ; if object is LINE then find other sides
 	    (progn
 	      (if (setq obj (getOb point 100000 0)); right side
 		(progn
 		  (setq line2point1 (cdr (assoc 10 obj)))
 		  (setq line2point2 (cdr (assoc 11 obj)))
-		  ;(print (list line2point1 line2point2))
-		  ;(print (length obj))
-		  ;(entmod (changeObj obj))
 		  (printext line1point1 line1point2 line2point1 line2point2 textsize)
 		  )
 		)
-	  
-
-	      
-	  
-	  ;(print obj)
-	  ;(setq obj (getOb point 0 -100000)); bottom side
-	  ;(entmod (changeObj obj))
-	  ;(setq obj (getOb point 0 100000)); top side
-	  ;(entmod (changeObj obj))
 	)
 	(progn
 	  ;(entmod (changeObj obj)) ; change object
@@ -183,8 +163,27 @@
 	  (setq i 0); find something???????????????????????????????
 	  ;(setq d (list (cons 0 0)))
 	  (setq point1 (cdr (assoc 10 obj)) dist 0);
+	  
+	  (print (cons 0 point1))
 	  (setq i (+ (vl-position (assoc 10 obj) obj) 1) )
 	  ;(print i)
+	  (setq j (+ (vl-position (assoc 10 obj) obj) 1) )
+	  (setq c 1)
+	  (setq points (list (cons 0 point1)))
+	  (while (< j (length obj))
+	    (progn
+	      (setq ob (nth j obj))
+	      (if (= (car ob) 10)
+		(progn
+		  (setq points (append points (list (cons c (cdr ob)))))
+		  (setq c (+ c 1))
+		  )
+		)
+	      (setq j (+ j 1))
+	      )
+	   )
+	  (print points)
+	  (print "---------------------")
 	  (while (< i (length obj))
 	    (progn
 	      (setq ob (nth i obj))
