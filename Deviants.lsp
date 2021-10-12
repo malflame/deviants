@@ -39,16 +39,28 @@
   );defun rnd
 
 (defun rndRange(/); generate numbers in range -10..10
-  (setq maxR 20; range
-	movR 10; move
+  (setq maxR 38; range
+	movR 19; move
 	)
-  (while (= (setq numSeq (- (fix(* maxR (rnd))) movR)) 0)); generate digits beetween 0..max_r and move result on mov_r under 0
+  (while (zerop (setq numSeq (- (fix(* maxR (rnd))) movR)))); generate digits beetween 0..max_r and move result on mov_r under 0
   (if (> numSeq 0)
     (progn
       (setq str (itoa numSeq))
       (setq str (strcat "+" str))
       )
     (setq str (itoa numSeq))
+    )
+  )
+
+(defun getPair(d1 / str)
+  (setq d2 (atoi (rndRange)))
+  (while (and (< (* d1 d2) 0) (>= (+ (abs d1) (abs d2)) 20)) (setq d2 (atoi (rndRange))))
+  (if (> d2 0)
+    (progn
+      (setq str (itoa d2))
+      (setq str (strcat "+" str))
+      )
+    (setq str (itoa d2))
     )
   )
 
@@ -105,10 +117,11 @@
       (setq x (+ x (/ dist 6)))
       (setq y (min (nth 1 line1point1) (nth 1 line1point2)))
       (setq y (- (+ y (/ dist 2)) (/ textsize 2)) )
-      (ptext x y 0 0 (rndRange) 6 textsize)
+      (setq dig (rndRange))
+      (ptext x y 0 0 dig 6 textsize)
       (setq x (min (nth 0 line2point1) (nth 0 line2point2)))
       (setq x (- x (/ dist 6)))
-      (ptext x y 0 2 (rndRange) 6 textsize)
+      (ptext x y 0 2 (getPair (atoi dig)) 6 textsize)
       ;--if add center text
       ;(setq x (- (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
       ;(ptext x y 0 1 "¹" 7 textsize)
@@ -119,10 +132,11 @@
       (setq x (+ (+ x (/ dist 2)) (/ textsize 2)) )
       (setq y (min (nth 1 line1point1) (nth 1 line1point2)))
       (setq y (+ y (/ dist 6)))
-      (ptext x y 90 0 (rndRange) 6 textsize)
+      (setq dig (rndRange))
+      (ptext x y 90 0 dig 6 textsize)
       (setq y (max (nth 1 line1point1) (nth 1 line1point2)))
       (setq y (- y (/ dist 6)))
-      (ptext x y 90 2 (rndRange) 6 textsize)
+      (ptext x y 90 2 (getPair (atoi dig)) 6 textsize)
       ;--if add center text
       ;(setq x (+ (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
       ;(ptext x y 90 1 "¹" 7 textsize)
