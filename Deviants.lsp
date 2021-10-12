@@ -164,7 +164,7 @@
 	  ;(setq d (list (cons 0 0)))
 	  (setq point1 (cdr (assoc 10 obj)) dist 0);
 	  
-	  (print (cons 0 point1))
+	  ;(print (cons 0 point1))
 	  (setq i (+ (vl-position (assoc 10 obj) obj) 1) )
 	  ;(print i)
 	  (setq j (+ (vl-position (assoc 10 obj) obj) 1) )
@@ -183,6 +183,20 @@
 	      )
 	   )
 	  (print points)
+	  (setq points (vl-sort points (function
+					 (lambda (v1 v2)
+					   ;(and
+					     (<= (nth 1 v1) (nth 1 v2))
+					   ;(<= (nth 2 v1) (nth 2 v2)))
+					   ))))
+	  (print points)
+	  (print (cdr (nth 0 points)))
+	  (if (= (length points) 4)
+	  (printext (cdr (nth 0 points))
+		    (cdr (nth 1 points))
+		    (cdr (nth 2 points))
+		    (cdr (nth 3 points)) textsize)
+	    )
 	  (print "---------------------")
 	  (while (< i (length obj))
 	    (progn
@@ -190,7 +204,7 @@
 	      (if (= (car ob) 10)
 		(progn
 		  (setq point2 (cdr ob));
-		  (print (distance point1 point2));
+		  ;(print (distance point1 point2));
 		  (if (<= dist (distance point1 point2))
 		    (progn
 		      (setq po1 point1 po2 point2 dist (distance point1 point2))
@@ -244,7 +258,7 @@
 	      (setq i (+ i 1))
 	    )
 	  )
-	  (print (distance po1 po2))
+	  ;(print (distance po1 po2))
 	  
 	  ;(print d)
 	)
