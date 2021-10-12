@@ -168,7 +168,8 @@
 		  )
 		)
 	  
-	  
+
+	      
 	  
 	  ;(print obj)
 	  ;(setq obj (getOb point 0 -100000)); bottom side
