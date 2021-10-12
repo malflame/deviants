@@ -1,9 +1,9 @@
-(defun ptext(x y a p te c ts); point (x,y) a - angle, p - position, te -text, c - color
+(defun ptext(x y a p te c ts l); point (x,y) a - angle, p - position, te -text, c - color, ts - textsize, l - layer
   (setq a (/ (* a pi) 180))
   (setq le (entmakex
 	     '(
 	       (0 . "TEXT")
-	       (8 . "deviants")
+	       (8 . "x_deviants")
 	       (10 0.0 0.0 0.0)
 	       (40 . 0.25)
 	       (1 . "abc")
@@ -23,6 +23,7 @@
   (setq ob (subst (cons 72 p) (assoc 72 ob) ob))
   (setq ob (subst (cons 62 c) (assoc 62 ob) ob))
   (setq ob (subst (cons 40 ts) (assoc 40 ob) ob))
+  (setq ob (subst (cons 8 l) (assoc 8 ob) ob))
   (entmod ob)
   (entupd le)
   )
@@ -106,14 +107,14 @@
       (setq y (min (nth 1 line1point1) (nth 1 line1point2)))
       (setq y (- (+ y (/ dist 2)) (/ textsize 2)) )
       (setq dig (rndRange))
-      (ptext x y 0 0 dig 6 textsize)
+      (ptext x y 0 0 dig 6 textsize "x_deviants")
       (setq x (min (nth 0 line2point1) (nth 0 line2point2)))
       (setq x (- x (/ dist 6)))
-      (ptext x y 0 2 (getPair (atoi dig)) 6 textsize)
+      (ptext x y 0 2 (getPair (atoi dig)) 6 textsize "x_deviants")
       ;--if add center text
-      ;(setq x (- (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
-      ;(ptext x y 0 1 "№" 7 textsize)
-      (print dist)
+      (setq x (- (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
+      (ptext x y 0 1 "####" 7 textsize "x_blocknumber")
+      ;(print dist)
       )
     (progn
       (setq x (min (nth 0 line1point1) (nth 0 line1point2)))
@@ -121,22 +122,25 @@
       (setq y (min (nth 1 line1point1) (nth 1 line1point2)))
       (setq y (+ y (/ dist 6)))
       (setq dig (rndRange))
-      (ptext x y 90 0 dig 6 textsize)
+      (ptext x y 90 0 dig 6 textsize "x_deviants")
       (setq y (max (nth 1 line1point1) (nth 1 line1point2)))
       (setq y (- y (/ dist 6)))
-      (ptext x y 90 2 (getPair (atoi dig)) 6 textsize)
+      (ptext x y 90 2 (getPair (atoi dig)) 6 textsize "x_deviants")
       ;--if add center text
-      ;(setq x (+ (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
-      ;(ptext x y 90 1 "№" 7 textsize)
+      (setq x (+ (nth 0 cen) (/ textsize 2)) y (- (nth 1 cen) (/ textsize 2)))
+      (ptext x y 90 1 "####" 7 textsize "x_blocknumber")
       )
     )
   )
 
-(defun C:Deviants(/)
+;(defun C:Deviants(/)
+(defun pp4(/)
   (setq txtStyle (getvar "textstyle"))
   (command "._STYLE" "ArialNew" "Arial" 0 1 0 "_N" "_N" "_N")
-  (if (not (setq layer (tblsearch "LAYER" "deviants")))
-    (command "._layer" "_n" "deviants" "_c" 6 "deviants" "")); add new layer if not exists
+  (if (not (setq layer (tblsearch "LAYER" "x_deviants")))
+    (command "._layer" "_n" "x_deviants" "_c" 6 "x_deviants" "")); add new layer if not exists
+  (if (not (setq layer (tblsearch "LAYER" "x_blocknumber")))
+    (command "._layer" "_n" "x_blocknumber" "_c" 6 "x_blocknumber" "")); add new layer if not exists
   ;(setq textsize (getreal "Введите размер текста:")) ; TextSize
   ;(if (not textsize) (setq textsize 0.25))
   (setq textsize 0.25)
@@ -195,4 +199,4 @@
   (princ)
   )
 
-  ;(pp4)
+  (pp4)
