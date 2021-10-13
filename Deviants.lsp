@@ -132,8 +132,8 @@
     )
   )
 
-;(defun C:Deviants(/)
-(defun pp4(/)
+(defun C:Deviants(/)
+;(defun pp4(/)
   (setq txtStyle (getvar "textstyle"))
   (command "._STYLE" "ArialNew" "Arial" 0 1 0 "_N" "_N" "_N")
   (if (not (setq layer (tblsearch "LAYER" "x_deviants")))
@@ -147,17 +147,43 @@
   
   (while point ; while true do something
     (progn
-      (if (setq obj (getOb point -100000 0)); find object in left side
+      (if (setq obj (getOb point -1000000 0)); find object in left side
 	(progn
 	  (setq line1point1 (cdr (assoc 10 obj)))
 	  (setq line1point2 (cdr (assoc 11 obj)))
 	  (if (= (cdr (assoc 0 obj)) "LINE") ; if object is LINE then find right side and print text
 	    (progn
-	      (if (setq obj (getOb point 100000 0)); right side
+	      (if (setq obj (getOb point 1000000 0)); right side
 		(progn
 		  (setq line2point1 (cdr (assoc 10 obj)))
 		  (setq line2point2 (cdr (assoc 11 obj)))
-		  (printext line1point1 line1point2 line2point1 line2point2 textsize)
+		  (setq obj (getOb point 0 -1000000)) ; bottom
+  		  (setq line3point1 (cdr (assoc 10 obj)))
+		  (setq line3point2 (cdr (assoc 11 obj)))
+		  (setq obj (getOb point 0 1000000)) ; top
+  		  (setq line4point1 (cdr (assoc 10 obj)))
+		  (setq line4point2 (cdr (assoc 11 obj)))
+		  (setq l1p1 (inters
+			       (list (nth 0 line1point1) -1000000 0.0) (list (nth 0 line1point1) 1000000 0.0)
+			       (list -1000000 (nth 1 line3point1) 0.0) (list 1000000 (nth 1 line3point1) 0.0)
+			       )
+			)
+		  (setq l1p2 (inters
+			       (list (nth 0 line1point1) -1000000 0.0) (list (nth 0 line1point1) 1000000 0.0)
+			       (list -1000000 (nth 1 line4point1) 0.0) (list 1000000 (nth 1 line4point1) 0.0)
+			       )
+			)
+		  (setq l2p1 (inters
+			       (list (nth 0 line2point1) -1000000 0.0) (list (nth 0 line2point1) 1000000 0.0)
+			       (list -1000000 (nth 1 line3point1) 0.0) (list 1000000 (nth 1 line3point1) 0.0)
+			       )
+			)
+		  (setq l2p2 (inters
+			       (list (nth 0 line2point1) -1000000 0.0) (list (nth 0 line2point1) 1000000 0.0)
+			       (list -1000000 (nth 1 line4point1) 0.0) (list 1000000 (nth 1 line4point1) 0.0)
+			       )
+			)
+		  (printext l1p1 l1p2 l2p1 l2p2 textsize)
 		  )
 		)
 	      )
@@ -198,4 +224,4 @@
   (princ)
   )
 
-  (pp4)
+ ; (pp4)
