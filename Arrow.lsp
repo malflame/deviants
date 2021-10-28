@@ -45,13 +45,14 @@
   (command "._STYLE" "ArialNew" "Arial" 0 1 0 "_N" "_N" "_N") ; create new textstyle
   (if (not (setq layer (tblsearch "LAYER" "x_deviants")))
     (command "._layer" "_n" "x_deviants" "_c" 6 "x_deviants" "")); add new layer if not exists
+  
   (setq textsize 0.25) ; textsize
-  (initget 1) (setq point (getpoint "\nТочка вставки:")) ; get point to insert arrow
+  (initget 1) (setq point (getpoint "\nРўРѕС‡РєР° РІСЃС‚Р°РІРєРё:")) ; get point to insert arrow
   (while point ; while point is not false
     (progn
-      (initget 1 "Левая Правая") ; get orientation of arrow
-      (if (not (setq orient (getkword "\nНаправление: [Левая/Правая] <Левая>")))
-	(setq orient "Левая") ; set default orientation
+      (initget 1 "Р›РµРІР°СЏ РџСЂР°РІР°СЏ") ; get orientation of arrow
+      (if (not (setq orient (getkword "\nРќР°РїСЂР°РІР»РµРЅРёРµ: [Р›РµРІР°СЏ/РџСЂР°РІР°СЏ] <Р›РµРІР°СЏ>")))
+	(setq orient "Р›РµРІР°СЏ") ; set default orientation
 	)
       (setq x (nth 0 point)  ; get coordinates
 	    y (nth 1 point)) ; for x, y
@@ -79,7 +80,7 @@
 	       )
 	    )
       
-      (if (= orient "Левая") ; check orient
+      (if (= orient "Р›РµРІР°СЏ") ; check orient
 	(progn
 	  (command "._rotate" line "" point "_R" 180 0) ; if left, then rotate arrows by 180 degrees
 	  (ptext (- x (* 6.5 0.2)) (+ y 0.2) 0 0 (rndRange) 6 textsize "x_deviants")       ; create digits
@@ -91,7 +92,7 @@
 	  )
 	)
       
-      (initget 1) (setq point (getpoint "\nТочка вставки:")) ; get new point for WHILE
+      (initget 1) (setq point (getpoint "\nРўРѕС‡РєР° РІСЃС‚Р°РІРєРё:")) ; get new point for WHILE
       )
     )
   (setvar "textstyle" txtStyle) ; set textstyle

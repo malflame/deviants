@@ -128,11 +128,10 @@
     (command "._layer" "_n" "x_deviants" "_c" 6 "x_deviants" "")); add new layer if not exists
   (if (not (setq layer (tblsearch "LAYER" "x_blocknumber")))
     (command "._layer" "_n" "x_blocknumber" "_c" 6 "x_blocknumber" "")); add new layer if not exists
-  ;(setq textsize (getreal "Введите размер текста:")) ; TextSize
+  ;(setq textsize (getreal "Р’РІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ С‚РµРєСЃС‚Р°:")) ; TextSize
   ;(if (not textsize) (setq textsize 0.25))
   (setq textsize 0.25)
-  (setq point (getpoint "\nКлик внутри прямоугольника (ESC для выхода): ")) ; get point
-  
+  (setq point (getpoint "\nРљР»РёРє РІРЅСѓС‚СЂРё РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° (ESC РґР»СЏ РІС‹С…РѕРґР°): ")) ; get point
   (while point ; while true do something
     (progn
       (if (setq obj (getOb point -1000000 0)); find object in left side
