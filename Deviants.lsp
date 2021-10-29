@@ -1,6 +1,6 @@
 (defun ptext(x y a p te c ts l); point (x,y) a - angle, p - position, te -text, c - color, ts - textsize, l - layer
-  (setq a (/ (* a pi) 180)) ; converting radians to degrees
-  (setq le (entmakex ; create text
+  (setq a (/ (* a pi) 180))
+  (setq le (entmakex
 	     '((0 . "TEXT")
 	       (8 . "x_deviants")
 	       (10 0.0 0.0 0.0)
@@ -21,17 +21,18 @@
   (setq ob (subst (cons 62 c) (assoc 62 ob) ob))
   (setq ob (subst (cons 40 ts) (assoc 40 ob) ob))
   (setq ob (subst (cons 8 l) (assoc 8 ob) ob))
-  (entmod ob) (entupd le)
+  (entmod ob)
+  (entupd le)
   )
 
-(defun rnd (/) ; generate random digits
+(defun rnd(/)
   (if (not seed) (setq seed (getvar "DATE")); get date
     )
   (setq mod 65536; module
         mult 25173; multiplicator
         inc 13849; increment
         seed (rem (+ (* mult seed) inc) mod); easy
-        random (/ seed mod) ; result
+        random (/ seed mod)
 	)
   )
 
@@ -42,16 +43,16 @@
   (while (zerop (setq numSeq (- (fix(* maxR (rnd))) movR)))); generate digits beetween 0..max_r and move result on mov_r under 0
   (if (> numSeq 0)
     (progn
-      (setq str (itoa numSeq)) ; result to string
-      (setq str (strcat "+" str)) ; if digit > 0 then concat to result "+"
+      (setq str (itoa numSeq))
+      (setq str (strcat "+" str))
       )
-    (setq str (itoa numSeq)) ; result to string
+    (setq str (itoa numSeq))
     )
   )
 
 (defun getPair(d1 / str)
-  (setq d2 (atoi (rndRange))) ; string to integer
-  (while (and (< (* d1 d2) 0) (>= (+ (abs d1) (abs d2)) 20)) (setq d2 (atoi (rndRange)))) ; get pair for digit
+  (setq d2 (atoi (rndRange)))
+  (while (and (< (* d1 d2) 0) (>= (+ (abs d1) (abs d2)) 20)) (setq d2 (atoi (rndRange))))
   (if (> d2 0)
     (progn
       (setq str (itoa d2))
@@ -71,16 +72,15 @@
 		 )
 	)
   
-  (if s (setq obj (entget (ssname s 0))) nil)
-  ) ; getob
+  (if s (setq obj (entget (ssname s 0))) nil))
 
 
 (defun printext(line1point1 line1point2 line2point1 line2point2 textsize)
   
-  (if (not (setq cen (inters line1point1 line2point2 line1point2 line2point1))) ; find inters fo lines
+  (if (not (setq cen (inters line1point1 line2point2 line1point2 line2point1)))
     (setq cen (inters line1point1 line2point1 line1point2 line2point2))
     )
-  (setq dist (min ; get min distanse from lines
+  (setq dist (min
 	       (distance line1point1 line2point1)
 	       (distance line1point1 line2point2)
 	       (distance line1point1 line1point2)
@@ -131,7 +131,8 @@
   ;(setq textsize (getreal "Введите размер текста:")) ; TextSize
   ;(if (not textsize) (setq textsize 0.25))
   (setq textsize 0.25)
-  (setq point (getpoint "\nКлик внутри прямоугольника (ESC для выхода): ")) ; get point
+  (setq point (getpoint)) ; get point
+  
   (while point ; while true do something
     (progn
       (if (setq obj (getOb point -1000000 0)); find object in left side
@@ -191,10 +192,10 @@
 		  (setq i (+ i 1))
 		  )
 		)
-	      (setq points (vl-sort points (function ; find min x from coordinates
+	      (setq points (vl-sort points (function
 					     (lambda (v1 v2)
 					       (<= (nth 1 v1) (nth 1 v2))))))
-	      (if (= (length points) 4) ; if rect then do
+	      (if (= (length points) 4)
 		(printext (cdr (nth 0 points))
 			  (cdr (nth 1 points))
 			  (cdr (nth 2 points))

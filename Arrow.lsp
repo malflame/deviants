@@ -21,42 +21,46 @@
   (setq ob (subst (cons 62 c) (assoc 62 ob) ob))
   (setq ob (subst (cons 40 ts) (assoc 40 ob) ob))
   (setq ob (subst (cons 8 l) (assoc 8 ob) ob))
-  (entmod ob) (entupd le)
+  (entmod ob)
+  (entupd le)
   )
 
-(defun rnd (/) ; generate random digits
-  (if (not seed) (setq seed (getvar "DATE")) ); get date
+(defun rnd(/)
+  (if (not seed) (setq seed (getvar "DATE")); get date
+    )
   (setq mod 65536; module
         mult 25173; multiplicator
         inc 13849; increment
         seed (rem (+ (* mult seed) inc) mod); easy
-        random (/ seed mod))
+        random (/ seed mod)
+	)
   )
 
-(defun rndRange(/); generate numbers in range 0..18
+(defun rndRange(/); generate numbers in range -10..10
   (setq maxR 18; range
-	movR 0); move
+	movR 0; move
+	)
   (while (zerop (setq numSeq (- (fix(* maxR (rnd))) movR)))); generate digits beetween 0..max_r and move result on mov_r under 0
-  (setq str (itoa numSeq)) ; result to string format
+  (setq str (itoa numSeq))
   )
 
-(defun c:arrow (/)
-  (setq txtStyle (getvar "textstyle")) ; get current textstyle
-  (command "._STYLE" "ArialNew" "Arial" 0 1 0 "_N" "_N" "_N") ; create new textstyle
+(defun C:arrow(/)
+  (setq txtStyle (getvar "textstyle"))
+  (command "._STYLE" "ArialNew" "Arial" 0 1 0 "_N" "_N" "_N")
   (if (not (setq layer (tblsearch "LAYER" "x_deviants")))
     (command "._layer" "_n" "x_deviants" "_c" 6 "x_deviants" "")); add new layer if not exists
-  
-  (setq textsize 0.25) ; textsize
-  (initget 1) (setq point (getpoint "\nТочка вставки:")) ; get point to insert arrow
-  (while point ; while point is not false
+  (setq textsize 0.25)
+  (initget 1) (setq point (getpoint "\nТочка вставки:"))
+  (while point
+    
     (progn
-      (initget 1 "Левая Правая") ; get orientation of arrow
+      (initget 1 "Левая Правая")
       (if (not (setq orient (getkword "\nНаправление: [Левая/Правая] <Левая>")))
-	(setq orient "Левая") ; set default orientation
+	(setq orient "Левая")
 	)
-      (setq x (nth 0 point)  ; get coordinates
-	    y (nth 1 point)) ; for x, y
-      (setq line (entmakex ; create arrows
+
+      (setq x (nth 0 point) y (nth 1 point))
+      (setq line (entmakex
 	       (list
 		 (cons 0  "LWPOLYLINE")
 		 (cons 8 "x_windows_doors")
@@ -80,22 +84,22 @@
 	       )
 	    )
       
-      (if (= orient "Левая") ; check orient
+      (if (= orient "Левая")
 	(progn
-	  (command "._rotate" line "" point "_R" 180 0) ; if left, then rotate arrows by 180 degrees
-	  (ptext (- x (* 6.5 0.2)) (+ y 0.2) 0 0 (rndRange) 6 textsize "x_deviants")       ; create digits
-	  (ptext (- x (* 1 0.15)) (+ y (* 5 0.2)) 0 2 (rndRange) 6 textsize "x_deviants")  ; for arrows
+	  (command "._rotate" line "" point "_R" 180 0)
+	  (ptext (- x (* 6.5 0.2)) (+ y 0.2) 0 0 (rndRange) 6 textsize "x_deviants")
+	  (ptext (- x (* 1 0.15)) (+ y (* 5 0.2)) 0 2 (rndRange) 6 textsize "x_deviants")
 	  )
 	(progn
-	  (ptext (+ x (* 6.5 0.2)) (- y (* 2 0.2)) 0 2 (rndRange) 6 textsize "x_deviants") ; create digits
-	  (ptext (+ x (* 1 0.15)) (- y (* 6.5 0.2)) 0 0 (rndRange) 6 textsize "x_deviants"); for arrows
+	  (ptext (+ x (* 6.5 0.2)) (- y (* 2 0.2)) 0 2 (rndRange) 6 textsize "x_deviants")
+	  (ptext (+ x (* 1 0.15)) (- y (* 6.5 0.2)) 0 0 (rndRange) 6 textsize "x_deviants")
 	  )
 	)
       
-      (initget 1) (setq point (getpoint "\nТочка вставки:")) ; get new point for WHILE
+      (initget 1) (setq point (getpoint "\nТочка вставки:"))
       )
     )
-  (setvar "textstyle" txtStyle) ; set textstyle
+  (setvar "textstyle" txtStyle)
   (princ)
   )
 ;(arrow)
